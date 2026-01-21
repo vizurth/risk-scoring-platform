@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package scoring.v1;
+
+option go_package = "github.com/vizurth/risk-scoring-platform/internal/api/gen;scoringv1";
+
+service ScoringService {
+  rpc ScoreTransaction(ScoreTransactionRequest) returns (ScoreTransactionResponse);
+}
+
+message ScoreTransactionRequest {
+  string user_id = 1;
+  double amount = 2;
+  string device_id = 3;
+  string country = 4;
+
+  // Features
+  int32 tx_count_1m = 5;
+  int32 failed_attempts_10m = 6;
+  bool is_new_device = 7;
+  bool country_mismatch = 8;
+  repeated string recent_devices = 9;
+  string ip_address = 10;
+}
+
+message ScoreTransactionResponse {
+  string decision = 1;
+  float score = 2;
+  repeated string reasons = 3;
+}
