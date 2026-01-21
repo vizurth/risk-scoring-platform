@@ -30,4 +30,4 @@ CREATE INDEX idx_rules_version ON rules(version);
 CREATE INDEX idx_rules_ruleset_id ON rules(ruleset_id);
 CREATE INDEX idx_rules_status ON rules(status);
 CREATE INDEX idx_rules_condition_type ON rules(condition_type);
-CREATE UNIQUE INDEX idx_rules_name_version ON rules(name, vers
+CREATE UNIQUE INDEX idx_rules_name_version ON rules(name, version);
