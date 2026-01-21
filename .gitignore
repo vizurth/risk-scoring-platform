@@ -43,10 +43,6 @@ vendor/
 /artifacts/
 /third_party/
 
-# Автогенерируемые файлы
-*.pb.go
-*.pb.gw.go
-*-generated.go
 
 # Профилирование
 *.prof

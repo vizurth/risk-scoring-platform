@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package scoring.v1;
+
+option go_package = "github.com/vizurth/risk-scoring-platform/proto/scoring-service/v1;scoringv1";
+
+service ScoringService {
+  rpc ScoreTransaction(ScoreTransactionRequest) returns (ScoreTransactionResponse);
+}
+
+message ScoreTransactionRequest {
+  string user_id = 1;
+  double amount = 2;
+  string device_id = 3;
+  string country = 4;
+  // фичи (если платёжный сервис их считает)
+  int32 tx_count_1m = 5;
+  bool is_new_device = 6;
+}
+
+message ScoreTransactionResponse {
+  string decision = 1;
+  float score = 2;
+  repeated string reasons = 3;
+}
