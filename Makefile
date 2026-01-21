@@ -1,32 +1,21 @@
-export PATH := $(LOCAL_BIN):$(PATH)
-PROTOAPIS_DIR=third_party
-PROTO_DIR_AUTH=internal/api/grpc
-GO_OUT_PATH_AUTH=internal/api/gen
-PROTOC=protoc
+PROTO_DIR=internal/api/grpc
+GEN_DIR=internal/api/gen
 
-.PHONY:up down test build_and
+.PHONY: proto
+proto:
+	protoc \
+		-I$(PROTO_DIR) \
+		--go_out=$(GEN_DIR) --go_opt=paths=source_relative \
+		--go-grpc_out=$(GEN_DIR) --go-grpc_opt=paths=source_relative \
+		$(PROTO_DIR)/scoring.proto
 
-build_and:
-	docker-compose -f docker-compose.yaml build
-
+. PHONY: up
 up:
 	docker-compose -f docker-compose.yaml up -d --build
 
+.PHONY: down
 down:
 	docker-compose -f docker-compose.yaml down
-
-test:
-	go test ./... -v
-
-proto:
-	$(PROTOC) \
-		-I $(PROTO_DIR_AUTH) \
-		-I $(PROTOAPIS_DIR) \
-		--go_out=$(GO_OUT_PATH_AUTH) --go_opt=paths=source_relative \
-		--go-grpc_out=$(GO_OUT_PATH_AUTH) --go-grpc_opt=paths=source_relative \
-		--grpc-gateway_out=$(GO_OUT_PATH_AUTH) --grpc-gateway_opt=paths=source_relative \
-		scoring.proto
-
 
 install-deps:
 	go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
@@ -40,8 +29,6 @@ get-deps:
 	go get -u google.golang.org/grpc/cmd/protoc-gen-go-grpc
 	go get -u github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway
 	go get -u github.com/envoyproxy/protoc-gen-validate
-
-.PHONY: cover
 
 vendor-proto:
 		@if [ ! -d third_party/google ]; then \
